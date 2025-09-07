@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coding-revolution</a> &gt; <a href="index.source.html" class="el_package">com.agentic.codingrevolution.exception</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.agentic.codingrevolution.exception;
+
+import com.agentic.codingrevolution.dto.ErrorResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+
+import java.time.Instant;
+
+/**
+ * Global exception handler for the application
+ */
+@ControllerAdvice
+<span class="fc" id="L17">public class GlobalExceptionHandler {</span>
+
+    /**
+     * Handle custom API exceptions
+     */
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleApiException(ApiException ex, WebRequest request) {
+<span class="nc" id="L24">        ErrorResponse errorResponse = new ErrorResponse(</span>
+                &quot;API_ERROR&quot;,
+<span class="nc" id="L26">                ex.getMessage(),</span>
+<span class="nc" id="L27">                ex.getStatusCode(),</span>
+<span class="nc" id="L28">                Instant.now().toString(),</span>
+<span class="nc" id="L29">                request.getDescription(false).replace(&quot;uri=&quot;, &quot;&quot;)</span>
+        );
+<span class="nc" id="L31">        return ResponseEntity.status(ex.getStatusCode()).body(errorResponse);</span>
+    }
+
+    /**
+     * Handle validation errors
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleValidationException(
+            MethodArgumentNotValidException ex, WebRequest request) {
+<span class="nc" id="L40">        ErrorResponse errorResponse = new ErrorResponse(</span>
+                &quot;VALIDATION_ERROR&quot;,
+<span class="nc" id="L42">                &quot;Validation failed: &quot; + ex.getBindingResult().getFieldError().getDefaultMessage(),</span>
+<span class="nc" id="L43">                HttpStatus.BAD_REQUEST.value(),</span>
+<span class="nc" id="L44">                Instant.now().toString(),</span>
+<span class="nc" id="L45">                request.getDescription(false).replace(&quot;uri=&quot;, &quot;&quot;)</span>
+        );
+<span class="nc" id="L47">        return ResponseEntity.badRequest().body(errorResponse);</span>
+    }
+
+    /**
+     * Handle illegal argument exceptions
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleIllegalArgumentException(
+            IllegalArgumentException ex, WebRequest request) {
+<span class="nc" id="L56">        ErrorResponse errorResponse = new ErrorResponse(</span>
+                &quot;INVALID_ARGUMENT&quot;,
+<span class="nc" id="L58">                ex.getMessage(),</span>
+<span class="nc" id="L59">                HttpStatus.BAD_REQUEST.value(),</span>
+<span class="nc" id="L60">                Instant.now().toString(),</span>
+<span class="nc" id="L61">                request.getDescription(false).replace(&quot;uri=&quot;, &quot;&quot;)</span>
+        );
+<span class="nc" id="L63">        return ResponseEntity.badRequest().body(errorResponse);</span>
+    }
+
+    /**
+     * Handle null pointer exceptions
+     */
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleNullPointerException(
+            NullPointerException ex, WebRequest request) {
+<span class="nc" id="L72">        ErrorResponse errorResponse = new ErrorResponse(</span>
+                &quot;NULL_POINTER_ERROR&quot;,
+                &quot;A null value was encountered where it was not expected&quot;,
+<span class="nc" id="L75">                HttpStatus.INTERNAL_SERVER_ERROR.value(),</span>
+<span class="nc" id="L76">                Instant.now().toString(),</span>
+<span class="nc" id="L77">                request.getDescription(false).replace(&quot;uri=&quot;, &quot;&quot;)</span>
+        );
+<span class="nc" id="L79">        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);</span>
+    }
+
+    /**
+     * Handle all other exceptions
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleGlobalException(Exception ex, WebRequest request) {
+<span class="nc" id="L87">        ErrorResponse errorResponse = new ErrorResponse(</span>
+                &quot;INTERNAL_SERVER_ERROR&quot;,
+<span class="nc" id="L89">                &quot;An unexpected error occurred: &quot; + ex.getMessage(),</span>
+<span class="nc" id="L90">                HttpStatus.INTERNAL_SERVER_ERROR.value(),</span>
+<span class="nc" id="L91">                Instant.now().toString(),</span>
+<span class="nc" id="L92">                request.getDescription(false).replace(&quot;uri=&quot;, &quot;&quot;)</span>
+        );
+<span class="nc" id="L94">        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

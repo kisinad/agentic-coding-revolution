@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+coding-revolution,com.agentic.codingrevolution.exception,GlobalExceptionHandler,112,3,0,0,29,1,5,1,5,1
+coding-revolution,com.agentic.codingrevolution.exception,ApiException,18,0,0,0,7,0,3,0,3,0
+coding-revolution,com.agentic.codingrevolution,CodingRevolutionApplication,5,3,0,0,2,1,1,1,1,1
+coding-revolution,com.agentic.codingrevolution.controller,SuccessController,0,67,0,0,0,21,0,6,0,6
+coding-revolution,com.agentic.codingrevolution.dto,ErrorResponse,68,0,0,0,25,0,13,0,13,0
+coding-revolution,com.agentic.codingrevolution.dto,ApiResponse,81,21,12,0,16,8,13,4,7,4
